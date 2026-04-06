@@ -1,14 +1,117 @@
-export class inputController {
-    constructor(actionToBind) {
-        this.action = actionToBind;
+export class InputController {
+    constructor() {
+        this.ACTION_LEFT = null;
+        this.ACTION_RIGHT = null;
+        this.ACTION_SPACE = null;
+        
+        this.deviceList = new Map();
+        this.actions = [];
+
+        this.buttonPress = this.buttonPress.bind(this);
+        this.buttonRelease = this.buttonRelease.bind(this);
     }
 
-    bindDevice(actionToBind) {
-
+    getDevices() {
+        return this.deviceList;
     }
 
-    isKeyPressed() {
+    getActiveDevices() {
+        let activeDev = new Array();
 
+        this.deviceList.forEach(dev => {
+            if (this.deviceList.get(dev) == true) {
+                activeDev.push(dev);
+            }
+        });
+        return activeDev;
     }
 
+    addDevice(deviceName) {
+        if (!this.isContainDevice(deviceName)) {
+            this.deviceList.set(deviceName, false);
+            console.log(`Устройство ${deviceName} добавлено!`);
+        } else {
+            console.log("Ошибка добавления устройства: устройство уже включено");
+        }
+    }
+
+    removeDevice(deviceName) {
+        if (this.isContainDevice(deviceName)) {
+            this.deviceList.delete(deviceName);
+            console.log(`Устройство ${deviceName} удалено!`);
+        } else {
+            console.log("Ошибка удаления устройства: устройство не найдено");
+        }
+    }
+
+    isContainDevice(device) {
+        if (this.deviceList.has(device)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    isEnabledDevice(device) {
+        if (this.isContainDevice(device) && this.deviceList.get(device)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    enableDevice(deviceName) {
+        if (!this.isEnabledDevice(deviceName)) {
+            this.deviceList.set(deviceName, true);
+
+            if (deviceName === "keyboard") {
+                document.addEventListener("keydown", this.buttonPress);
+                document.addEventListener("keyup", this.buttonRelease);
+            }
+        }
+    }
+
+    disableDevice(deviceName) {
+        if (this.isEnabledDevice(deviceName)) {
+            this.deviceList.set(deviceName, false);
+
+            if (deviceName === "keyboard") {
+                document.removeEventListener('keydown', this.buttonPress);
+                document.removeEventListener('keyup', this.buttonRelease);
+            }
+        }
+    }
+
+    buttonPress(event) {
+        if (event.keyCode === 37 || event.keyCode === 65) {
+            this.ACTION_LEFT = true;
+        }
+
+        if (event.keyCode === 68 || event.keyCode === 39) {
+            this.ACTION_RIGHT = true;
+        }
+
+        if (event.key === ' ') {
+            this.ACTION_SPACE = true;
+            setTimeout(() => {
+                this.ACTION_SPACE = false;
+            }, 500);
+        }
+    }
+
+    buttonRelease(event) {
+        if (event.keyCode === 37 || event.keyCode == 65) {
+            this.ACTION_LEFT = false;
+        }
+
+        if (event.keyCode === 68 || event.keyCode === 39) {
+            this.ACTION_RIGHT = false;
+        }
+
+        if (event.key === ' ') {
+            this.ACTION_SPACE = false;
+        }
+    }
 }
+
+export const controller = new InputController();
