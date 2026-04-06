@@ -2,6 +2,8 @@ export class InputController {
     constructor() {
         this.ACTION_LEFT = null;
         this.ACTION_RIGHT = null;
+        this.ACTION_TOP = null;
+        this.ACTION_DOWN = null;
         this.ACTION_SPACE = null;
         
         this.deviceList = new Map();
@@ -91,6 +93,14 @@ export class InputController {
             this.ACTION_RIGHT = true;
         }
 
+        if (event.keyCode === 87 || event.keyCode === 38) {
+            this.ACTION_TOP = true;
+        }
+
+        if (event.keyCode === 83 || event.keyCode === 40) {
+            this.ACTION_BOTTOM = true;
+        }
+
         if (event.key === ' ') {
             this.ACTION_SPACE = true;
             setTimeout(() => {
@@ -100,12 +110,20 @@ export class InputController {
     }
 
     buttonRelease(event) {
-        if (event.keyCode === 37 || event.keyCode == 65) {
+        if (event.keyCode === 65 || event.keyCode == 37) {
             this.ACTION_LEFT = false;
         }
 
         if (event.keyCode === 68 || event.keyCode === 39) {
             this.ACTION_RIGHT = false;
+        }
+
+        if (event.keyCode === 87 || event.keyCode === 38) {
+            this.ACTION_TOP = false;
+        }
+
+        if (event.keyCode === 83 || event.keyCode === 40) {
+            this.ACTION_BOTTOM = false;
         }
 
         if (event.key === ' ') {

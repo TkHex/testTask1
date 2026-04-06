@@ -74,6 +74,14 @@ function updateCanvas() {
         something.x = something.x + 10;
     }
 
+    if (controller.ACTION_TOP) {
+        something.y = something.y - 10;
+    }
+
+    if (controller.ACTION_BOTTOM) {
+        something.y = something.y + 10;
+    }
+
     if (controller.ACTION_SPACE) {
         if (counter === 0) {
             something.y = something.y - 30;
@@ -94,10 +102,22 @@ function updateCanvas() {
         something.x = CANVAS_WIDTH - 40;
     }
 
+    if (something.y < 10) {
+        something.y = 10;
+    }
+
+    if (something.y > CANVAS_HEIGHT - 100) {
+        something.y = CANVAS_HEIGHT - 100;
+    }
+
     if (controller.ACTION_LEFT) {
         controllerState.textContent = "ACTION_LEFT";
     } else if (controller.ACTION_RIGHT) {
         controllerState.textContent = "ACTION_RIGHT";
+    } else if(controller.ACTION_TOP) {
+        controllerState.textContent = "ACTION_TOP";
+    } else if (controller.ACTION_BOTTOM) {
+        controllerState.textContent = "ACTION_BOTTOM";
     } else {
         controllerState.textContent = "Ничего не нажато";
     }
